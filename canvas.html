@@ -1,0 +1,48 @@
+<html>
+<head>
+	<title>TRÈS TRIST</title>
+	<link rel="shortcut icon" href="img/pintade.png">
+	
+	<meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+	<meta charset="UTF-8">
+
+	<link href="css/main.css" rel="stylesheet">
+	<script src="js/canvas.js"></script>
+</head>
+<body onload="setSize(canvasSize)">
+	<div id="wrapper">
+		<div id="canvas">
+			<canvas id="tetris"> </canvas>
+		</div>
+	</div>
+	<button style="background-color: yellow" onclick="game()"> Grid </button>
+	<button style="background-color: yellow" onclick="paintCanvas(canvasSize, canvasMatrix)"> Left block </button>
+</body>
+
+<script>
+	var canvasSize = Math.min(window.innerWidth, window.innerHeight);
+	var canvasMatrix = [];
+	for(var i=0; i<100; i++) {
+		canvasMatrix[i] = [];
+		for(var j=0; j<100; j++) {
+			canvasMatrix[i][j] = 0;
+		}
+	}
+	
+	var blockStack = []
+	for(var i=0; i<4; i++) {
+		blockStack[i] = [];
+	}
+
+function game(){
+  initMatrix(canvasMatrix);
+  setInterval(playing(),41);
+}
+
+function playing(){
+
+	paintCanvas(canvasSize, canvasMatrix)
+}
+	
+</script>
+</html>
