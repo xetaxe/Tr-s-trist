@@ -20,6 +20,8 @@
 </body>
 
 <script>
+	var createdBlock = 0;
+	var movingBlock = 0;
 	var canvasSize = Math.min(window.innerWidth, window.innerHeight);
 	var canvasMatrix = [];
 	for(var i=0; i<100; i++) {
@@ -36,11 +38,21 @@
 
 function game(){
   initMatrix(canvasMatrix);
-  setInterval(playing(),41);
+  setInterval(playing,100);
 }
 
 function playing(){
-
+console.log(createdBlock);
+	if(createdBlock ==0){
+		createdBlock = 1 + Math.floor(4*Math.random());
+		newBlock(createdBlock, canvasMatrix);
+	}
+	else{ 
+		if(moveBlock(createdBlock, canvasMatrix, blockStack)==false){
+			createdBlock=0;
+		}
+	}
+	
 	paintCanvas(canvasSize, canvasMatrix)
 }
 	

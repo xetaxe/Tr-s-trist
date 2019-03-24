@@ -1,5 +1,6 @@
 var blockWidth = 4;
 var movingBlock;
+var movingColor;
 
 var colors = {
     black : "#000000",
@@ -63,8 +64,6 @@ function paintCanvas(size, matrix) {
 	
 	initMatrix(matrix);
 	
-	initBottomBlock(matrix);
-	
 	for(var i=0; i<100; i++){
 		for(var j=0; j<100; j++){
 			context.fillStyle = getColor(matrix[i][j]);
@@ -92,6 +91,7 @@ function drawGrid(size, matrix) {
 }
 
 
+
 function initMatrix(matrix) {
 	for(var i=39; i<60; i++){
 		for(var j=39; j<60; j++){
@@ -104,48 +104,155 @@ function initMatrix(matrix) {
 function initLeftBlock(matrix) {
 	movingBlock = 0;
 	var color = 2 + Math.floor(4*Math.random());
+	movingColor = color;
 	for(var i=0; i<blockWidth; i++){
 		for(var j=1+i; j<99-i; j++){
-			matrix[i][j]=2;
+			matrix[i][j]=color;
 		}
 	}
 }
 
 function initRightBlock(matrix) {
 	movingBlock = 0;
+	var color = 2 + Math.floor(4*Math.random());
+	movingColor = color;
 	for(var i=0; i<blockWidth; i++){
 		for(var j=1+i; j<99-i; j++){
-			matrix[99-i][j]=3;
+			matrix[99-i][j]=color;
 		}
 	}
 }
 
 function initTopBlock(matrix) {
 	movingBlock = 0;
+	var color = 2 + Math.floor(4*Math.random());
+	movingColor = color;
 	for(var i=0; i<blockWidth; i++){
 		for(var j=1+i; j<99-i; j++){
-			matrix[j][i]=4;
+			matrix[j][i]=color;
 		}
 	}
 }
 
 function initBottomBlock(matrix) {
 	movingBlock = 0;
+	var color = 2 + Math.floor(4*Math.random());
+	movingColor = color;
 	for(var i=0; i<blockWidth; i++){
 		for(var j=1+i; j<99-i; j++){
-			matrix[j][99-i]=5;
+			matrix[j][99-i]=color;
 		}
 	}
 }
 
 function moveLeftBlock(matrix, blockMatrix) {
-	if(movingBlock<40-4*(blockMatrix[3].length+1)){
+	if(movingBlock+1 >= 36-4*blockMatrix[3].length){
+		movingBlock = 0;
+		blockMatrix[3].push(movingColor);
+		return false;
+	}
+	else{
+		for(var i=movingBlock; i<100-movingBlock; i++){
+			matrix[movingBlock][i]=0;
+		}
+		for(var i=movingBlock+blockWidth; i<99-movingBlock-blockWidth; i++){
+			matrix[movingBlock+blockWidth][i]=movingColor;
+		}
 		movingBlock++;
 	}
-	for(var i=movingBlock; i<100-movingBlock; i++){
-		matrix[movingBlock][i]=0;
+}
+
+function moveRightBlock(matrix, blockMatrix) {
+	if(movingBlock >= 36-4*blockMatrix[1].length){
+		movingBlock = 0;
+		blockMatrix[1].push(movingColor);
+		return false;
 	}
-	for(var i=movingBlock+blockWidth; i<100-movingBlock-blockWidth; i++){
-		matrix[movingBlock][i]=2;
+	else{
+		for(var i=movingBlock; i<100-movingBlock; i++){
+			matrix[99-movingBlock][i]=0;
+		}
+		for(var i=movingBlock+blockWidth; i<100-movingBlock-blockWidth; i++){
+			matrix[99-blockWidth-movingBlock][i]=movingColor;
+		}
+		movingBlock++;
 	}
+}
+
+function moveTopBlock(matrix, blockMatrix) {
+	if(movingBlock >= 36-4*blockMatrix[0].length){
+		movingBlock = 0;
+		blockMatrix[0].push(movingColor);
+		return false;
+	}
+	else{
+		for(var i=movingBlock; i<100-movingBlock; i++){
+			matrix[i][movingBlock]=0;
+		}
+		for(var i=movingBlock+blockWidth; i<100-movingBlock-blockWidth; i++){
+			matrix[i][movingBlock+blockWidth]=movingColor;
+		}
+		movingBlock++;
+	}
+}
+
+function moveBottomBlock(matrix, blockMatrix) {
+	if(movingBlock >= 36-4*blockMatrix[2].length){
+		movingBlock = 0;
+		blockMatrix[2].push(movingColor);
+		return false;
+	}
+	else{
+		for(var i=movingBlock; i<100-movingBlock; i++){
+			matrix[i][99-movingBlock]=0;
+		}
+		for(var i=movingBlock+blockWidth; i<100-movingBlock-blockWidth; i++){
+			matrix[i][99-movingBlock-blockWidth]=movingColor;
+		}
+		movingBlock++;
+	}
+}
+
+
+function newBlock(index, matrix){
+	switch(index){
+    case 1:
+    initLeftBlock(matrix);
+    break ;
+
+    case 2:
+    initRightBlock(matrix);
+    break ;
+
+    case 3:
+    initTopBlock(matrix);
+    break ;
+
+    case 4:
+    initBottomBlock(matrix);
+    break ;
+	}
+}
+
+function moveBlock(index, matrix, blockMatrix){
+	switch(index){
+    case 1:
+    return moveLeftBlock(matrix, blockMatrix);
+
+    case 2:
+    return moveRightBlock(matrix, blockMatrix);
+    break ;
+
+    case 3:
+    return moveTopBlock(matrix, blockMatrix);
+    break ;
+
+    case 4:
+    return moveBottomBlock(matrix, blockMatrix);
+    break ;
+	}
+}
+
+function rotateRight(matrix) {
+	
 }
